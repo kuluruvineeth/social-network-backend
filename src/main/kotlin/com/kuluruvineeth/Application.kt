@@ -2,6 +2,10 @@ package com.kuluruvineeth
 
 import io.ktor.server.application.*
 import com.kuluruvineeth.plugins.*
+import com.kuluruvineeth.ui.mainModule
+import org.koin.dsl.module
+import org.koin.ktor.ext.inject
+import org.koin.ktor.plugin.Koin
 
 fun main(args: Array<String>): Unit =
     io.ktor.server.netty.EngineMain.main(args)
@@ -14,4 +18,7 @@ fun Application.module() {
     configureHTTP()
     configureSecurity()
     configureRouting()
+    install(Koin){
+        modules(mainModule)
+    }
 }
