@@ -1,6 +1,6 @@
 package com.kuluruvineeth.routes
 
-import com.kuluruvineeth.controller.user.UserController
+import com.kuluruvineeth.repository.user.UserRepository
 import com.kuluruvineeth.data.models.User
 import com.kuluruvineeth.data.requests.CreateAccountRequest
 import com.kuluruvineeth.data.responses.BasicApiResponse
@@ -12,15 +12,14 @@ import io.ktor.server.response.*
 import io.ktor.server.routing.*
 import org.koin.ktor.ext.inject
 
-fun Route.userRoutes(){
-    val userController: UserController by inject()
+fun Route.createUserRoute(userRepository: UserRepository){
     route("/api/user/create"){
         post {
             val request = kotlin.runCatching { call.receiveNullable<CreateAccountRequest>() }.getOrNull() ?: kotlin.run {
                 call.respond(HttpStatusCode.BadRequest)
                 return@post
             }
-            val userExists = userController.getUserByEmail(request.email) != null
+            val userExists = userRepository.getUserByEmail(request.email) != null
             print("UserExists $userExists")
             if(userExists){
                 call.respond(
@@ -40,7 +39,7 @@ fun Route.userRoutes(){
                 )
                 return@post
             }
-            userController.createUser(
+            userRepository.createUser(
                 User(
                     email = request.email,
                     username = request.username,

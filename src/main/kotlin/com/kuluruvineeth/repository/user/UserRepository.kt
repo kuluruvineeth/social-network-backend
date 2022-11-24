@@ -1,8 +1,8 @@
-package com.kuluruvineeth.controller.user
+package com.kuluruvineeth.repository.user
 
 import com.kuluruvineeth.data.models.User
 
-interface UserController {
+interface UserRepository {
 
     suspend fun createUser(user: User)
 

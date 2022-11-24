@@ -1,3 +1,5 @@
+import org.jetbrains.kotlin.gradle.dsl.KotlinCompile
+
 val ktor_version: String by project
 val kotlin_version: String by project
 val logback_version: String by project
@@ -18,6 +20,12 @@ application {
 
     val isDevelopment: Boolean = project.ext.has("development")
     applicationDefaultJvmArgs = listOf("-Dio.ktor.development=$isDevelopment")
+}
+
+tasks.withType<org.jetbrains.kotlin.gradle.tasks.KotlinCompile>().all{
+    kotlinOptions{
+        jvmTarget = "1.8"
+    }
 }
 
 repositories {
@@ -43,6 +51,9 @@ dependencies {
     //kmongo
     implementation("org.litote.kmongo:kmongo-coroutine:$kmongo_version")
 
+    //Gson
+    testImplementation("com.google.code.gson:gson:2.8.8")
+
     // Koin Core features
     implementation("io.insert-koin:koin-core:$koin_version")
     // Koin Test features
@@ -52,4 +63,7 @@ dependencies {
     implementation("io.insert-koin:koin-ktor:$koin_ktor")
     // SLF4J Logger
     implementation("io.insert-koin:koin-logger-slf4j:$koin_ktor")
+
+    //testing
+    testImplementation("com.google.truth:truth:1.1.3")
 }
