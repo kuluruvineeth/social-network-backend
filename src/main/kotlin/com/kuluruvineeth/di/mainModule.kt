@@ -1,9 +1,14 @@
-package com.kuluruvineeth.ui
+package com.kuluruvineeth.di
 
 import com.kuluruvineeth.repository.follow.FollowRepository
 import com.kuluruvineeth.repository.follow.FollowRepositoryImpl
+import com.kuluruvineeth.repository.post.PostRepository
+import com.kuluruvineeth.repository.post.PostRepositoryImpl
 import com.kuluruvineeth.repository.user.UserRepository
 import com.kuluruvineeth.repository.user.UserRepositoryImpl
+import com.kuluruvineeth.service.FollowService
+import com.kuluruvineeth.service.PostService
+import com.kuluruvineeth.service.UserService
 import com.kuluruvineeth.util.Constants
 import org.koin.dsl.module
 import org.litote.kmongo.coroutine.CoroutineClient
@@ -25,4 +30,10 @@ val mainModule = module {
     single<FollowRepository> {
         FollowRepositoryImpl(get())
     }
+    single<PostRepository>{
+        PostRepositoryImpl(get())
+    }
+    single { UserService(get()) }
+    single { PostService(get()) }
+    single { FollowService(get()) }
 }

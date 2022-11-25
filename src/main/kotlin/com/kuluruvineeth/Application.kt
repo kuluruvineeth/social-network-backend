@@ -2,9 +2,7 @@ package com.kuluruvineeth
 
 import io.ktor.server.application.*
 import com.kuluruvineeth.plugins.*
-import com.kuluruvineeth.ui.mainModule
-import org.koin.dsl.module
-import org.koin.ktor.ext.inject
+import com.kuluruvineeth.di.mainModule
 import org.koin.ktor.plugin.Koin
 
 fun main(args: Array<String>): Unit =
