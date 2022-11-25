@@ -1,11 +1,9 @@
 package com.kuluruvineeth.plugins
 
 import com.kuluruvineeth.repository.follow.FollowRepository
+import com.kuluruvineeth.repository.post.PostRepository
 import com.kuluruvineeth.repository.user.UserRepository
-import com.kuluruvineeth.routes.createUserRoute
-import com.kuluruvineeth.routes.followUser
-import com.kuluruvineeth.routes.loginUser
-import com.kuluruvineeth.routes.unfollowUser
+import com.kuluruvineeth.routes.*
 import io.ktor.server.routing.*
 import io.ktor.http.*
 import io.ktor.server.http.content.*
@@ -17,6 +15,7 @@ import org.koin.ktor.ext.inject
 fun Application.configureRouting() {
     val userRepository: UserRepository by inject()
     val followRepository: FollowRepository by inject()
+    val postRepository: PostRepository by inject()
     routing {
         //User routes
         createUserRoute(userRepository)
@@ -25,5 +24,8 @@ fun Application.configureRouting() {
         //Following routes
         followUser(followRepository)
         unfollowUser(followRepository)
+
+        //Post routes
+        createPostRoute(postRepository)
     }
 }
