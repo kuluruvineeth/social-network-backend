@@ -22,5 +22,13 @@ class UserRepositoryImpl(
         return users.findOne(User::email eq email)
     }
 
+    override suspend fun doesPasswordForUserMatch(
+        email: String,
+        enteredPassword: String
+    ): Boolean {
+        val user = getUserByEmail(email)
+        return user?.password  == enteredPassword
+    }
+
 
 }

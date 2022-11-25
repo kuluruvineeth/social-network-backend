@@ -15,8 +15,10 @@ import io.ktor.server.routing.*
 import io.ktor.server.testing.*
 import kotlinx.coroutines.runBlocking
 import org.koin.core.context.startKoin
+import org.koin.core.context.stopKoin
 import org.koin.test.KoinTest
 import org.koin.test.inject
+import kotlin.test.AfterTest
 import kotlin.test.BeforeTest
 import kotlin.test.Test
 
@@ -32,6 +34,11 @@ internal class CreateUserRouteTest : KoinTest{
         startKoin {
             modules(testModule)
         }
+    }
+
+    @AfterTest
+    fun tearDown(){
+        stopKoin()
     }
 
 

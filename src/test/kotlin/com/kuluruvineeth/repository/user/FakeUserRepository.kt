@@ -19,5 +19,10 @@ class FakeUserRepository : UserRepository {
         return users.find { it.email == email }
     }
 
+    override suspend fun doesPasswordForUserMatch(email: String, enteredPassword: String): Boolean {
+        val user = getUserByEmail(email)
+        return user?.password  == enteredPassword
+    }
+
 
 }
