@@ -1,5 +1,7 @@
 package com.kuluruvineeth.ui
 
+import com.kuluruvineeth.repository.follow.FollowRepository
+import com.kuluruvineeth.repository.follow.FollowRepositoryImpl
 import com.kuluruvineeth.repository.user.UserRepository
 import com.kuluruvineeth.repository.user.UserRepositoryImpl
 import com.kuluruvineeth.util.Constants
@@ -19,5 +21,8 @@ val mainModule = module {
     }
     single<UserRepository>{
         UserRepositoryImpl(get())
+    }
+    single<FollowRepository> {
+        FollowRepositoryImpl(get())
     }
 }
