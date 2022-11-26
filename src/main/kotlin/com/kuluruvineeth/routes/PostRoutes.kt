@@ -6,6 +6,7 @@ import com.kuluruvineeth.data.requests.DeletePostRequest
 import com.kuluruvineeth.data.requests.FollowUpdateRequest
 import com.kuluruvineeth.data.responses.BasicApiResponse
 import com.kuluruvineeth.repository.post.PostRepository
+import com.kuluruvineeth.service.CommentService
 import com.kuluruvineeth.service.LikeService
 import com.kuluruvineeth.service.PostService
 import com.kuluruvineeth.service.UserService
@@ -74,7 +75,8 @@ fun Route.getPostsForFollows(
 
 fun Route.deletePost(
     postService : PostService,
-    likeService: LikeService
+    likeService: LikeService,
+    commentService: CommentService
 ){
     authenticate {
         delete("/api/post/delete"){
@@ -93,7 +95,7 @@ fun Route.deletePost(
             if(post.userId == call.userId){
                 postService.deletePost(request.postId)
                 likeService.deleteLikesForParent(request.postId)
-                //TODO: Delete comments from post
+                commentService.deleteCommentsForPost(request.postId)
                 call.respond(HttpStatusCode.OK)
             }else{
                 call.respond(HttpStatusCode.Unauthorized)
