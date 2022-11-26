@@ -1,5 +1,6 @@
 package com.kuluruvineeth.di
 
+import com.google.gson.Gson
 import com.kuluruvineeth.repository.activity.ActivityRepository
 import com.kuluruvineeth.repository.activity.ActivityRepositoryImpl
 import com.kuluruvineeth.repository.comment.CommentRepository
@@ -53,4 +54,5 @@ val mainModule = module {
     single { LikeService(get()) }
     single { CommentService(get()) }
     single { ActivityService(get(),get(),get()) }
+    single { Gson() }
 }
