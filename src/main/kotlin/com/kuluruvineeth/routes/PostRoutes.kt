@@ -2,10 +2,12 @@ package com.kuluruvineeth.routes
 
 import com.kuluruvineeth.data.models.Post
 import com.kuluruvineeth.data.requests.CreatePostRequest
+import com.kuluruvineeth.data.requests.DeletePostRequest
 import com.kuluruvineeth.data.requests.FollowUpdateRequest
 import com.kuluruvineeth.data.responses.BasicApiResponse
 import com.kuluruvineeth.plugins.email
 import com.kuluruvineeth.repository.post.PostRepository
+import com.kuluruvineeth.service.LikeService
 import com.kuluruvineeth.service.PostService
 import com.kuluruvineeth.service.UserService
 import com.kuluruvineeth.util.ApiResponseMessages
@@ -19,7 +21,7 @@ import io.ktor.server.request.*
 import io.ktor.server.response.*
 import io.ktor.server.routing.*
 
-fun Route.createPostRoute(
+fun Route.createPost(
     postService: PostService,
     userService: UserService
 ){
@@ -82,5 +84,37 @@ fun Route.getPostsForFollows(
                 )
             }
         }
+    }
+}
+
+
+fun Route.deletePost(
+    postService : PostService,
+    userService: UserService,
+    likeService: LikeService
+){
+    delete("/api/post/delete"){
+        val request = kotlin.runCatching { call.receiveNullable<DeletePostRequest>() }.getOrNull() ?: kotlin.run {
+            call.respond(HttpStatusCode.BadRequest)
+            return@delete
+        }
+        val post = postService.getPost(request.postId)
+        if(post==null){
+            call.respond(
+                HttpStatusCode.NotFound
+            )
+            return@delete
+        }
+        ifEmailBelongsToUser(
+            userId = post.userId,
+            validateEmail = userService::doesEmailBelongToUserId
+        ){
+            postService.deletePost(request.postId)
+            likeService.deleteLikesForParent(request.postId)
+            //TODO: Delete comments from post
+            call.respond(HttpStatusCode.OK)
+        }
+
+
     }
 }

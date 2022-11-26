@@ -19,7 +19,7 @@ import io.ktor.server.response.*
 import io.ktor.server.routing.*
 import java.util.*
 
-fun Route.createUserRoute(userService: UserService){
+fun Route.createUser(userService: UserService){
     route("/api/user/create"){
         post {
             val request = kotlin.runCatching { call.receiveNullable<CreateAccountRequest>() }.getOrNull() ?: kotlin.run {

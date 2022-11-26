@@ -47,4 +47,8 @@ class PostRepositoryImpl(
             .toList()
 
     }
+
+    override suspend fun getPost(postId: String): Post? {
+        return posts.findOneById(postId)
+    }
 }
