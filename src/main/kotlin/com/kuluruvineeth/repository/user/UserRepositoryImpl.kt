@@ -30,5 +30,9 @@ class UserRepositoryImpl(
         return user?.password  == enteredPassword
     }
 
+    override suspend fun doesEmailBelongToUserId(email: String, userId: String): Boolean {
+       return users.findOneById(userId)?.email == email
+    }
+
 
 }

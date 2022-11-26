@@ -16,22 +16,27 @@ import io.ktor.server.request.*
 import org.koin.ktor.ext.inject
 
 fun Application.configureRouting() {
-    val userRepository: UserRepository by inject()
     val userService: UserService by inject()
     val postService: PostService by inject()
     val followService: FollowService by inject()
-    val followRepository: FollowRepository by inject()
-    val postRepository: PostRepository by inject()
+    val jwtIssuer = environment.config.property("jwt.domain").getString()
+    val jwtAudience = environment.config.property("jwt.audience").getString()
+    val jwtSecret = environment.config.property("jwt.secret").getString()
     routing {
         //User routes
         createUserRoute(userService)
-        loginUser(userRepository)
+        loginUser(
+            userService = userService,
+            jwtIssuer = jwtIssuer,
+            jwtAudience = jwtAudience,
+            jwtSecret = jwtSecret
+        )
 
         //Following routes
         followUser(followService)
         unfollowUser(followService)
 
         //Post routes
-        createPostRoute(postService)
+        createPostRoute(postService,userService)
     }
 }
