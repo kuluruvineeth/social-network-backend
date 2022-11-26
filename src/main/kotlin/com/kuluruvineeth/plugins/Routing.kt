@@ -4,10 +4,7 @@ import com.kuluruvineeth.repository.follow.FollowRepository
 import com.kuluruvineeth.repository.post.PostRepository
 import com.kuluruvineeth.repository.user.UserRepository
 import com.kuluruvineeth.routes.*
-import com.kuluruvineeth.service.FollowService
-import com.kuluruvineeth.service.LikeService
-import com.kuluruvineeth.service.PostService
-import com.kuluruvineeth.service.UserService
+import com.kuluruvineeth.service.*
 import io.ktor.server.routing.*
 import io.ktor.http.*
 import io.ktor.server.http.content.*
@@ -22,6 +19,7 @@ fun Application.configureRouting() {
     val followService: FollowService by inject()
     val likeService: LikeService by inject()
 
+    val commentService: CommentService by inject()
 
     val jwtIssuer = environment.config.property("jwt.domain").getString()
     val jwtAudience = environment.config.property("jwt.audience").getString()
@@ -43,10 +41,15 @@ fun Application.configureRouting() {
         //Post routes
         createPost(postService,userService)
         getPostsForFollows(postService,userService)
-        deletePost(postService,userService)
+        deletePost(postService,userService,likeService)
 
         //Like routes
         likeParent(likeService,userService)
         unlikeParent(likeService,userService)
+
+        //Comment routes
+        createComment(commentService,userService)
+        deleteComment(commentService,userService,likeService)
+        getCommentsForPost(commentService)
     }
 }
