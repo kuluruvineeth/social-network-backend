@@ -12,6 +12,7 @@ import com.kuluruvineeth.data.responses.BasicApiResponse
 import com.kuluruvineeth.service.UserService
 import com.kuluruvineeth.util.ApiResponseMessages
 import com.kuluruvineeth.util.ApiResponseMessages.FIELDS_BLANK
+import com.kuluruvineeth.util.ApiResponseMessages.INVALID_CREDENTIALS
 import io.ktor.http.*
 import io.ktor.server.application.*
 import io.ktor.server.request.*
@@ -73,12 +74,25 @@ fun Route.loginUser(
             return@post
         }
 
-        val isCorrectPassword = userService.doesPasswordMatchForUser(request)
+        val user = userService.getUserByEmail(request.email) ?: kotlin.run {
+            call.respond(
+                HttpStatusCode.OK,
+                BasicApiResponse(
+                    successful = false,
+                    message = INVALID_CREDENTIALS
+                )
+            )
+            return@post
+        }
+        val isCorrectPassword = userService.isValidPassword(
+            enteredPassword = request.password,
+            actualPassword = user.password
+        )
 
         if(isCorrectPassword){
             val expiresIn = 1000L * 60L * 60L * 24L * 365L
             val token = JWT.create()
-                .withClaim("email",request.email)
+                .withClaim("userId",user.id)
                 .withIssuer(jwtIssuer)
                 .withExpiresAt(Date(System.currentTimeMillis() + expiresIn))
                 .withAudience(jwtAudience)
