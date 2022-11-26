@@ -1,5 +1,7 @@
 package com.kuluruvineeth.repository.follow
 
+import com.kuluruvineeth.data.models.Following
+
 interface FollowRepository {
 
     suspend fun followUserIfExists(
@@ -11,4 +13,8 @@ interface FollowRepository {
         followingUserId: String,
         followedUserId: String
     ): Boolean
+
+    suspend fun getFollowsByUser(userId: String): List<Following>
+
+    suspend fun doesUserFollow(followingUserId: String, followedUserId: String): Boolean
 }

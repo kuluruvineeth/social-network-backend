@@ -13,8 +13,10 @@ import com.kuluruvineeth.service.UserService
 import com.kuluruvineeth.util.ApiResponseMessages
 import com.kuluruvineeth.util.ApiResponseMessages.FIELDS_BLANK
 import com.kuluruvineeth.util.ApiResponseMessages.INVALID_CREDENTIALS
+import com.kuluruvineeth.util.QueryParams
 import io.ktor.http.*
 import io.ktor.server.application.*
+import io.ktor.server.auth.*
 import io.ktor.server.request.*
 import io.ktor.server.response.*
 import io.ktor.server.routing.*
@@ -113,5 +115,25 @@ fun Route.loginUser(
             )
         }
 
+    }
+}
+
+fun Route.searchUser(userService: UserService){
+    authenticate {
+        get("/api/user/search"){
+            val query = call.parameters[QueryParams.PARAM_QUERY]
+            if(query==null || query.isBlank()){
+                call.respond(
+                    HttpStatusCode.OK,
+                    listOf<User>()
+                )
+                return@get
+            }
+            val searchResults = userService.searchForUsers(query,call.userId)
+            call.respond(
+                HttpStatusCode.OK,
+                searchResults
+            )
+        }
     }
 }
