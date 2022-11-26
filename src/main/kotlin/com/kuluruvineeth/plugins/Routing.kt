@@ -51,6 +51,7 @@ fun Application.configureRouting() {
         //Like routes
         likeParent(likeService,activityService)
         unlikeParent(likeService)
+        getLikesForParent(likeService)
 
         //Comment routes
         createComment(commentService,activityService)

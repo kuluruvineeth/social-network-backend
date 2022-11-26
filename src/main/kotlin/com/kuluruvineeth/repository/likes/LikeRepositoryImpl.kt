@@ -17,7 +17,7 @@ class LikeRepositoryImpl(
         return if(doesUserExist){
             likes.insertOne(
                 Like(
-                    userId,parentId,parentType
+                    userId,parentId,parentType,System.currentTimeMillis()
                 )
             )
             true
@@ -43,5 +43,14 @@ class LikeRepositoryImpl(
 
     override suspend fun deleteLikesForParent(parentId: String) {
         likes.deleteMany(Like::parentId eq parentId)
+    }
+
+    override suspend fun getLikesForParent(parentId: String, page: Int, pageSize: Int): List<Like> {
+        return likes
+            .find(Like::parentId eq parentId)
+            .skip(page * pageSize)
+            .limit(pageSize)
+            .descendingSort(Like::timestamp)
+            .toList()
     }
 }
