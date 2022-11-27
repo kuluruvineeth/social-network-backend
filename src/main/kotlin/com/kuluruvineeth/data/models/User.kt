@@ -1,5 +1,6 @@
 package com.kuluruvineeth.data.models
 
+import com.kuluruvineeth.data.responses.SkillDto
 import org.bson.codecs.pojo.annotations.BsonId
 import org.bson.types.ObjectId
 
@@ -10,7 +11,7 @@ data class User(
     val profileImageUrl: String,
     val bannerUrl: String,
     val bio: String,
-    val skills: List<Skill> = listOf(),
+    val skills: List<SkillDto> = listOf(),
     val githubUrl: String?,
     val instagramUrl: String?,
     val linkedInUrl: String?,

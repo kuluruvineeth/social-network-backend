@@ -79,7 +79,7 @@ class UserService(
             postCount = user.postCount,
             profilePictureUrl = user.profileImageUrl,
             bannerUrl = user.bannerUrl,
-            topSkills = user.skills.map{it.toSkillResponse()},
+            topSkills = user.skills,
             githubUrl = user.githubUrl,
             instagramUrl = user.instagramUrl,
             linkedInUrl = user.linkedInUrl,
