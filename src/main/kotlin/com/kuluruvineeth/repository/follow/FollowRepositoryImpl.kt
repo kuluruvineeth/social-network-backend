@@ -6,6 +6,7 @@ import com.mongodb.client.model.Filters.and
 import org.litote.kmongo.MongoOperator
 import org.litote.kmongo.coroutine.CoroutineDatabase
 import org.litote.kmongo.eq
+import org.litote.kmongo.inc
 
 class FollowRepositoryImpl(
     db: CoroutineDatabase
@@ -23,6 +24,14 @@ class FollowRepositoryImpl(
         if(!doesFollowingUserExist || !doesFollowedUserExist){
             return false
         }
+        users.updateOneById(
+            followingUserId,
+            inc(User::followingCount,1)
+        )
+        users.updateOneById(
+            followedUserId,
+            inc(User::followerCount,1)
+        )
         following.insertOne(
             Following(followingUserId,followedUserId)
         )
@@ -36,6 +45,16 @@ class FollowRepositoryImpl(
                 Following::followedUserId eq followedUserId
             )
         )
+        if(deleteResult.deletedCount > 0){
+            users.updateOneById(
+                followingUserId,
+                inc(User::followingCount,-1)
+            )
+            users.updateOneById(
+                followedUserId,
+                inc(User::followerCount,-1)
+            )
+        }
         return deleteResult.deletedCount > 0
     }
 
