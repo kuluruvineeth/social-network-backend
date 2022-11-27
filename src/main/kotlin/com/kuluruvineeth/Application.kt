@@ -14,7 +14,7 @@ fun Application.module() {
         modules(mainModule)
     }
     configureSockets()
-    configureSessions()
+    //configureSessions()
     configureSerialization()
     configureMonitoring()
     configureHTTP()
