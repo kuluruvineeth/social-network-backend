@@ -4,6 +4,7 @@ import com.kuluruvineeth.data.models.Chat
 import com.kuluruvineeth.data.models.Message
 import com.kuluruvineeth.data.models.SimpleUser
 import com.kuluruvineeth.data.models.User
+import com.kuluruvineeth.data.responses.ChatDto
 import org.litote.kmongo.and
 import org.litote.kmongo.contains
 import org.litote.kmongo.coroutine.CoroutineDatabase
@@ -27,10 +28,23 @@ class ChatRepositoryImpl(
             .toList()
     }
 
-    override suspend fun getChatsForUser(ownUserId: String): List<Chat> {
+    override suspend fun getChatsForUser(ownUserId: String): List<ChatDto> {
         return chats.find(Chat::userIds contains ownUserId)
             .descendingSort(Chat::timestamp)
             .toList()
+            .map { chat ->
+                val otherUserId = chat.userIds.find { it != ownUserId }
+                val user = users.findOneById(otherUserId ?: "")
+                val message = messages.findOneById(chat.lastMessageId)
+                ChatDto(
+                    chatId = chat.id,
+                    remoteUserId = user?.id,
+                    remoteUsername = user?.username,
+                    remoteUserProfilePictureUrl = user?.profileImageUrl,
+                    lastMessage = message?.text,
+                    timestamp = message?.timestamp
+                )
+            }
     }
 
     override suspend fun doesChatBelongToUser(chatId: String, userId: String): Boolean {
