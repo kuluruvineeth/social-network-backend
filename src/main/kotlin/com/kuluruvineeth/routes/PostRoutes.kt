@@ -89,7 +89,7 @@ fun Route.getPostsForFollows(
     authenticate {
         get("/api/post/get"){
             val page = call.parameters[QueryParams.PARAM_PAGE]?.toIntOrNull() ?: 0
-            val pageSize = call.parameters[QueryParams.PARAM_PAGE_SIZE]?.toIntOrNull() ?: Constants.DEFAULT_POST_PAGE_SIZE
+            val pageSize = call.parameters[QueryParams.PARAM_PAGE_SIZE]?.toIntOrNull() ?: Constants.DEFAULT_PAGE_SIZE
 
             val posts = postService.getPostsForFollows(call.userId,page,pageSize)
             call.respond(
@@ -140,7 +140,7 @@ fun Route.getPostsForProfile(
         get("/api/user/posts"){
             val userId = call.parameters[QueryParams.PARAM_USER_ID]
             val page = call.parameters[QueryParams.PARAM_PAGE]?.toIntOrNull() ?: 0
-            val pageSize = call.parameters[QueryParams.PARAM_PAGE_SIZE]?.toIntOrNull() ?: Constants.DEFAULT_POST_PAGE_SIZE
+            val pageSize = call.parameters[QueryParams.PARAM_PAGE_SIZE]?.toIntOrNull() ?: Constants.DEFAULT_PAGE_SIZE
 
             val posts = postService.getPostsForProfile(
                 ownUserId = call.userId,

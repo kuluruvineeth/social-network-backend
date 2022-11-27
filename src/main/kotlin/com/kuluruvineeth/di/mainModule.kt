@@ -3,6 +3,8 @@ package com.kuluruvineeth.di
 import com.google.gson.Gson
 import com.kuluruvineeth.repository.activity.ActivityRepository
 import com.kuluruvineeth.repository.activity.ActivityRepositoryImpl
+import com.kuluruvineeth.repository.chat.ChatRepository
+import com.kuluruvineeth.repository.chat.ChatRepositoryImpl
 import com.kuluruvineeth.repository.comment.CommentRepository
 import com.kuluruvineeth.repository.comment.CommentRepositoryImpl
 import com.kuluruvineeth.repository.follow.FollowRepository
@@ -52,6 +54,9 @@ val mainModule = module {
     single<SkillRepository>{
         SkillRepositoryImpl(get())
     }
+    single<ChatRepository>{
+        ChatRepositoryImpl(get())
+    }
     single { UserService(get(),get()) }
     single { PostService(get()) }
     single { FollowService(get()) }
@@ -59,5 +64,6 @@ val mainModule = module {
     single { CommentService(get(),get()) }
     single { ActivityService(get(),get(),get()) }
     single { SkillService(get()) }
+    single { ChatService(get()) }
     single { Gson() }
 }

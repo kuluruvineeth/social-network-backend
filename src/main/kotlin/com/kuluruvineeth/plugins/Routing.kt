@@ -23,6 +23,7 @@ fun Application.configureRouting() {
     val commentService: CommentService by inject()
     val activityService: ActivityService by inject()
     val skillService: SkillService by inject()
+    val chatService: ChatService by inject()
 
     val jwtIssuer = environment.config.property("jwt.domain").getString()
     val jwtAudience = environment.config.property("jwt.audience").getString()
@@ -67,6 +68,11 @@ fun Application.configureRouting() {
 
         //Skill routes
         getSkills(skillService)
+
+        //Chat routes
+        getChatsForUser(chatService)
+        getMessagesForChat(chatService)
+        chatWebSocket(chatService)
 
         static {
             resource("static")
