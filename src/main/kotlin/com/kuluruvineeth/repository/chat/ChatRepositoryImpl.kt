@@ -55,7 +55,7 @@ class ChatRepositoryImpl(
         messages.insertOne(message)
     }
 
-    override suspend fun insertChat(userId1: String, userId2: String, messageId: String) {
+    override suspend fun insertChat(userId1: String, userId2: String, messageId: String):String {
         val chat = Chat(
             userIds = listOf(
                 userId1,
@@ -66,6 +66,7 @@ class ChatRepositoryImpl(
         )
         val chatId = chats.insertOne(chat).insertedId?.asObjectId().toString()
         messages.updateOneById(messageId, setValue(Message::chatId,chatId))
+        return chat.id
     }
 
     override suspend fun doesChatByUserExist(userId1: String, userId2: String): Boolean {
