@@ -9,7 +9,7 @@ data class User(
     val username: String,
     val password: String,
     val profileImageUrl: String,
-    val bannerUrl: String,
+    val bannerUrl: String?,
     val bio: String,
     val skills: List<SkillDto> = listOf(),
     val githubUrl: String?,

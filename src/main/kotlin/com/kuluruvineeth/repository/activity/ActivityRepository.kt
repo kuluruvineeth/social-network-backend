@@ -1,6 +1,7 @@
 package com.kuluruvineeth.repository.activity
 
 import com.kuluruvineeth.data.models.Activity
+import com.kuluruvineeth.data.responses.ActivityResponse
 import com.kuluruvineeth.util.Constants
 
 interface ActivityRepository {
@@ -9,7 +10,7 @@ interface ActivityRepository {
         userId: String,
         page: Int = 0,
         pageSize: Int = Constants.DEFAULT_ACTIVITY_PAGE_SIZE
-    ): List<Activity>
+    ): List<ActivityResponse>
 
     suspend fun createActivity(activity: Activity)
 

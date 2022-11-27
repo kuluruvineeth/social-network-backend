@@ -65,7 +65,7 @@ class UserService(
                 bio = user.bio,
                 isFollowing = isFollowing
             )
-        }
+        }.filter { it.userId != userId }
     }
 
     suspend fun getUserProfile(userId: String,callerUserId:String): ProfileResponse? {

@@ -1,6 +1,7 @@
 package com.kuluruvineeth.service
 
 import com.kuluruvineeth.data.models.Activity
+import com.kuluruvineeth.data.responses.ActivityResponse
 import com.kuluruvineeth.data.util.ActivityType
 import com.kuluruvineeth.data.util.ParentType
 import com.kuluruvineeth.repository.activity.ActivityRepository
@@ -18,7 +19,7 @@ class ActivityService(
         userId: String,
         page: Int = 0,
         pageSize: Int = Constants.DEFAULT_ACTIVITY_PAGE_SIZE
-    ): List<Activity>{
+    ): List<ActivityResponse>{
         return activityRepository.getActivitiesForUser(userId,page,pageSize)
     }
 

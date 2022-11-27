@@ -10,6 +10,7 @@ import com.kuluruvineeth.repository.follow.FollowRepository
 import com.kuluruvineeth.service.ActivityService
 import com.kuluruvineeth.service.FollowService
 import com.kuluruvineeth.util.ApiResponseMessages.USER_NOT_FOUND
+import com.kuluruvineeth.util.QueryParams
 import io.ktor.http.*
 import io.ktor.server.application.*
 import io.ktor.server.auth.*
@@ -60,27 +61,31 @@ fun Route.followUser(
 }
 
 fun Route.unfollowUser(followService: FollowService){
-    delete("/api/following/unfollow"){
-        val request = kotlin.runCatching { call.receiveNullable<FollowUpdateRequest>() }.getOrNull() ?: kotlin.run {
-            call.respond(HttpStatusCode.BadRequest)
-            return@delete
-        }
-        val didUserExist = followService.unfollowUserIfExists(request,call.userId)
-        if(didUserExist){
-            call.respond(
-                HttpStatusCode.OK,
-                BasicApiResponse<Unit>(
-                    successful = true
+
+    authenticate {
+        delete("/api/following/unfollow"){
+            val userId = call.parameters[QueryParams.PARAM_USER_ID] ?: kotlin.run {
+                call.respond(HttpStatusCode.BadRequest)
+                return@delete
+            }
+            val didUserExist = followService.unfollowUserIfExists(userId,call.userId)
+            if(didUserExist){
+                call.respond(
+                    HttpStatusCode.OK,
+                    BasicApiResponse<Unit>(
+                        successful = true
+                    )
                 )
-            )
-        }else{
-            call.respond(
-                HttpStatusCode.OK,
-                BasicApiResponse<Unit>(
-                    successful = false,
-                    message = USER_NOT_FOUND
+            }else{
+                call.respond(
+                    HttpStatusCode.OK,
+                    BasicApiResponse<Unit>(
+                        successful = false,
+                        message = USER_NOT_FOUND
+                    )
                 )
-            )
+            }
         }
     }
+
 }
