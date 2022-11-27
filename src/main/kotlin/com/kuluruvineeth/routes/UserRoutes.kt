@@ -86,7 +86,9 @@ fun Route.getUserProfile(userService: UserService){
                 HttpStatusCode.OK,
                 BasicApiResponse(
                     successful = true,
-                    data = profileResponse
+                    data = profileResponse.also {
+                        println("RESPONDING WITH $it")
+                    }
                 )
             )
         }

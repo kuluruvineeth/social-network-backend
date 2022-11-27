@@ -11,6 +11,8 @@ import com.kuluruvineeth.repository.likes.LikeRepository
 import com.kuluruvineeth.repository.likes.LikeRepositoryImpl
 import com.kuluruvineeth.repository.post.PostRepository
 import com.kuluruvineeth.repository.post.PostRepositoryImpl
+import com.kuluruvineeth.repository.skill.SkillRepository
+import com.kuluruvineeth.repository.skill.SkillRepositoryImpl
 import com.kuluruvineeth.repository.user.UserRepository
 import com.kuluruvineeth.repository.user.UserRepositoryImpl
 import com.kuluruvineeth.service.*
@@ -47,12 +49,15 @@ val mainModule = module {
     single<ActivityRepository>{
         ActivityRepositoryImpl(get())
     }
-
+    single<SkillRepository>{
+        SkillRepositoryImpl(get())
+    }
     single { UserService(get(),get()) }
     single { PostService(get()) }
     single { FollowService(get()) }
     single { LikeService(get(),get(),get()) }
     single { CommentService(get()) }
     single { ActivityService(get(),get(),get()) }
+    single { SkillService(get()) }
     single { Gson() }
 }
