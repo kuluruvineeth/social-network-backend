@@ -143,6 +143,7 @@ fun Route.getPostsForProfile(
             val pageSize = call.parameters[QueryParams.PARAM_PAGE_SIZE]?.toIntOrNull() ?: Constants.DEFAULT_POST_PAGE_SIZE
 
             val posts = postService.getPostsForProfile(
+                ownUserId = call.userId,
                 userId = userId ?: call.userId,
                 page = page,
                 pageSize = pageSize
