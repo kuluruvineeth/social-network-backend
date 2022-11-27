@@ -1,17 +1,12 @@
 package com.kuluruvineeth.plugins
 
-import com.kuluruvineeth.repository.follow.FollowRepository
-import com.kuluruvineeth.repository.post.PostRepository
-import com.kuluruvineeth.repository.user.UserRepository
 import com.kuluruvineeth.routes.*
 import com.kuluruvineeth.service.*
+import com.kuluruvineeth.service.chat.ChatController
+import com.kuluruvineeth.service.chat.ChatService
 import io.ktor.server.routing.*
-import io.ktor.http.*
 import io.ktor.server.http.content.*
 import io.ktor.server.application.*
-import io.ktor.server.auth.*
-import io.ktor.server.response.*
-import io.ktor.server.request.*
 import org.koin.ktor.ext.inject
 
 fun Application.configureRouting() {
@@ -24,6 +19,7 @@ fun Application.configureRouting() {
     val activityService: ActivityService by inject()
     val skillService: SkillService by inject()
     val chatService: ChatService by inject()
+    val chatController: ChatController by inject()
 
     val jwtIssuer = environment.config.property("jwt.domain").getString()
     val jwtAudience = environment.config.property("jwt.audience").getString()
@@ -72,7 +68,7 @@ fun Application.configureRouting() {
         //Chat routes
         getChatsForUser(chatService)
         getMessagesForChat(chatService)
-        chatWebSocket(chatService)
+        chatWebSocket(chatController)
 
         static {
             resource("static")

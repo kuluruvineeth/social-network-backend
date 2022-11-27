@@ -18,6 +18,8 @@ import com.kuluruvineeth.repository.skill.SkillRepositoryImpl
 import com.kuluruvineeth.repository.user.UserRepository
 import com.kuluruvineeth.repository.user.UserRepositoryImpl
 import com.kuluruvineeth.service.*
+import com.kuluruvineeth.service.chat.ChatController
+import com.kuluruvineeth.service.chat.ChatService
 import com.kuluruvineeth.util.Constants
 import org.koin.dsl.module
 import org.litote.kmongo.coroutine.CoroutineClient
@@ -66,4 +68,6 @@ val mainModule = module {
     single { SkillService(get()) }
     single { ChatService(get()) }
     single { Gson() }
+
+    single { ChatController(get()) }
 }

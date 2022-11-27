@@ -1,6 +1,8 @@
 package com.kuluruvineeth.routes
 
-import com.kuluruvineeth.service.ChatService
+import com.kuluruvineeth.service.chat.ChatController
+import com.kuluruvineeth.service.chat.ChatService
+import com.kuluruvineeth.service.chat.ChatSession
 import com.kuluruvineeth.util.Constants
 import com.kuluruvineeth.util.QueryParams
 import io.ktor.http.*
@@ -8,12 +10,13 @@ import io.ktor.server.application.*
 import io.ktor.server.auth.*
 import io.ktor.server.response.*
 import io.ktor.server.routing.*
+import io.ktor.server.sessions.*
 import io.ktor.server.websocket.*
 import io.ktor.websocket.*
 import kotlinx.coroutines.channels.consumeEach
 
 
-fun Route.getMessagesForChat(chatService:ChatService){
+fun Route.getMessagesForChat(chatService: ChatService){
     authenticate {
         get("/api/chat/messages"){
             val chatId = call.parameters[QueryParams.PARAM_CHAT_ID] ?: kotlin.run {
@@ -43,21 +46,30 @@ fun Route.getChatsForUser(chatService: ChatService){
     }
 }
 
-fun Route.chatWebSocket(chatService: ChatService){
+fun Route.chatWebSocket(chatController: ChatController){
     webSocket("/api/chat/webSocket") {
-        incoming.consumeEach { frame ->
-            when(frame){
-                is Frame.Text -> {
-                    if(frame.readText() == "Hello World"){
-                        send(Frame.Text("Yo, what's up"))
-                    }
-                }
+        val session = call.sessions.get("SESSION") as? ChatSession
+        if(session == null){
+            close(CloseReason(CloseReason.Codes.VIOLATED_POLICY,"No session"))
+            return@webSocket
+        }
+        try {
+            incoming.consumeEach { frame ->
+                when(frame){
+                    is Frame.Text -> {
 
-                is Frame.Binary -> TODO()
-                is Frame.Close -> TODO()
-                is Frame.Ping -> TODO()
-                is Frame.Pong -> TODO()
+                    }
+
+                    is Frame.Binary -> TODO()
+                    is Frame.Close -> TODO()
+                    is Frame.Ping -> TODO()
+                    is Frame.Pong -> TODO()
+                }
             }
+        }catch (e: Exception){
+
+        }finally {
+            chatController.onDisconnect(session.userId)
         }
     }
 }

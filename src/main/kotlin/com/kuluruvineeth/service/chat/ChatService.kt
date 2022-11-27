@@ -1,4 +1,4 @@
-package com.kuluruvineeth.service
+package com.kuluruvineeth.service.chat
 
 import com.kuluruvineeth.data.models.Chat
 import com.kuluruvineeth.data.models.Message
