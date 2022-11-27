@@ -8,6 +8,7 @@ import com.kuluruvineeth.data.responses.ProfileResponse
 import com.kuluruvineeth.data.responses.UserResponseItem
 import com.kuluruvineeth.repository.follow.FollowRepository
 import com.kuluruvineeth.repository.user.UserRepository
+import com.kuluruvineeth.util.Constants
 
 class UserService(
     private val userRepository: UserRepository,
@@ -43,8 +44,8 @@ class UserService(
                 email = request.email,
                 username = request.username,
                 password = request.password,
-                profileImageUrl = "",
-                bannerUrl = "",
+                profileImageUrl = Constants.DEFAULT_PROFILE_PICTURE_PATH,
+                bannerUrl = Constants.DEFAULT_BANNER_IMAGE_PATH,
                 bio = "",
                 githubUrl = null,
                 instagramUrl = null,
