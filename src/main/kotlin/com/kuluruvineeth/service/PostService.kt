@@ -2,6 +2,7 @@ package com.kuluruvineeth.service
 
 import com.kuluruvineeth.data.models.Post
 import com.kuluruvineeth.data.requests.CreatePostRequest
+import com.kuluruvineeth.data.responses.PostResponse
 import com.kuluruvineeth.repository.post.PostRepository
 import com.kuluruvineeth.util.Constants
 
@@ -44,5 +45,9 @@ class PostService(
 
     suspend fun deletePost(postId: String){
         repository.deletePost(postId)
+    }
+
+    suspend fun getPostDetails(ownUserId: String, postId: String): PostResponse?{
+        return repository.getPostDetails(ownUserId,postId)
     }
 }

@@ -1,6 +1,7 @@
 package com.kuluruvineeth.repository.post
 
 import com.kuluruvineeth.data.models.Post
+import com.kuluruvineeth.data.responses.PostResponse
 import com.kuluruvineeth.util.Constants
 
 interface PostRepository {
@@ -22,4 +23,6 @@ interface PostRepository {
     ): List<Post>
 
     suspend fun getPost(postId: String): Post?
+
+    suspend fun getPostDetails(userId: String,postId: String): PostResponse?
 }
