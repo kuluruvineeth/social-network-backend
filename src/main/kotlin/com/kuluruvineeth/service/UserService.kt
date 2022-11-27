@@ -44,6 +44,7 @@ class UserService(
                 username = request.username,
                 password = request.password,
                 profileImageUrl = "",
+                bannerUrl = "",
                 bio = "",
                 githubUrl = null,
                 instagramUrl = null,
@@ -58,6 +59,7 @@ class UserService(
         return users.map { user ->
             val isFollowing = followsByUser.find { it.followedUserId == userId } != null
             UserResponseItem(
+                userId = user.id,
                 username = user.username,
                 profilePictureUrl = user.profileImageUrl,
                 bio = user.bio,
@@ -69,12 +71,14 @@ class UserService(
     suspend fun getUserProfile(userId: String,callerUserId:String): ProfileResponse? {
         val user = userRepository.getUserById(userId) ?: return null
         return ProfileResponse(
+            userId = user.id,
             username = user.username,
             bio = user.bio,
             followerCount = user.followerCount,
             followingCount = user.followingCount,
             postCount = user.postCount,
             profilePictureUrl = user.profileImageUrl,
+            bannerUrl = user.bannerUrl,
             topSkillUrls = user.skills,
             githubUrl = user.githubUrl,
             instagramUrl = user.instagramUrl,
@@ -90,10 +94,11 @@ class UserService(
 
     suspend fun updateUser(
         userId: String,
-        profileImageUrl: String,
+        profileImageUrl: String?,
+        bannerUrl: String?,
         updateProfileRequest: UpdateProfileRequest
     ): Boolean{
-        return userRepository.updateUser(userId,profileImageUrl,updateProfileRequest)
+        return userRepository.updateUser(userId,profileImageUrl,bannerUrl,updateProfileRequest)
     }
 
     fun validateCreateAccountRequest(request: CreateAccountRequest) : ValidationEvent{

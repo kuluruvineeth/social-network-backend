@@ -9,6 +9,7 @@ import io.ktor.server.routing.*
 import io.ktor.http.*
 import io.ktor.server.http.content.*
 import io.ktor.server.application.*
+import io.ktor.server.auth.*
 import io.ktor.server.response.*
 import io.ktor.server.request.*
 import org.koin.ktor.ext.inject
@@ -27,6 +28,7 @@ fun Application.configureRouting() {
     val jwtSecret = environment.config.property("jwt.secret").getString()
     routing {
         //User routes
+        authenticate()
         createUser(userService)
         loginUser(
             userService = userService,

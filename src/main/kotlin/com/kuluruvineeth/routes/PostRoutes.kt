@@ -63,7 +63,7 @@ fun Route.createPost(
                 if(createPostAcknowledged){
                     call.respond(
                         HttpStatusCode.OK,
-                        BasicApiResponse(
+                        BasicApiResponse<Unit>(
                             successful = true
                         )
                     )
