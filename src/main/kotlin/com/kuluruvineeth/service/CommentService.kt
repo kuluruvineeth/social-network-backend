@@ -2,11 +2,14 @@ package com.kuluruvineeth.service
 
 import com.kuluruvineeth.data.models.Comment
 import com.kuluruvineeth.data.requests.CreateCommentRequest
+import com.kuluruvineeth.data.responses.CommentResponse
 import com.kuluruvineeth.repository.comment.CommentRepository
+import com.kuluruvineeth.repository.user.UserRepository
 import com.kuluruvineeth.util.Constants
 
 class CommentService(
-    private val repository: CommentRepository
+    private val commentRepository: CommentRepository,
+    private val userRepository: UserRepository
 ) {
 
     suspend fun createComment(createCommentRequest: CreateCommentRequest,userId:String): ValidationEvent{
@@ -18,8 +21,12 @@ class CommentService(
                 return ValidationEvent.ErrorCommentTooLong
             }
         }
-        repository.createComment(
+        val user = userRepository.getUserById(userId) ?: return ValidationEvent.UserNotFound
+        commentRepository.createComment(
             Comment(
+                username = user.username,
+                profileImageUrl = user.profileImageUrl,
+                likeCount = 0,
                 comment = createCommentRequest.comment,
                 userId = userId,
                 postId = createCommentRequest.postId,
@@ -30,25 +37,26 @@ class CommentService(
     }
 
     suspend fun deleteCommentsForPost(postId: String){
-        repository.deleteCommentsFromPost(postId)
+        commentRepository.deleteCommentsFromPost(postId)
     }
 
     suspend fun deleteComment(commentId: String): Boolean{
-        return repository.deleteComment(commentId)
+        return commentRepository.deleteComment(commentId)
     }
 
-    suspend fun getCommentsForPost(postId: String): List<Comment>{
-        return repository.getCommentsForPost(postId)
+    suspend fun getCommentsForPost(postId: String,ownUserId: String): List<CommentResponse>{
+        return commentRepository.getCommentsForPost(postId,ownUserId)
     }
 
     suspend fun getCommentById(commentId: String): Comment? {
-        return repository.getComment(commentId)
+        return commentRepository.getComment(commentId)
     }
 
     sealed class ValidationEvent{
         object ErrorFieldEmpty : ValidationEvent()
         object ErrorCommentTooLong : ValidationEvent()
         object Success : ValidationEvent()
+        object UserNotFound : ValidationEvent()
     }
 
 }

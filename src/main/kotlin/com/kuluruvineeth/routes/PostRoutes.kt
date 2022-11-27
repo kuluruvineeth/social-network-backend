@@ -1,5 +1,6 @@
 package com.kuluruvineeth.routes
 
+import com.fasterxml.jackson.databind.introspect.TypeResolutionContext.Basic
 import com.google.gson.Gson
 import com.kuluruvineeth.data.models.Post
 import com.kuluruvineeth.data.requests.CreatePostRequest
@@ -149,6 +150,28 @@ fun Route.getPostsForProfile(
             call.respond(
                 HttpStatusCode.OK,
                 posts
+            )
+        }
+    }
+}
+
+fun Route.getPostDetails(postService: PostService){
+    authenticate {
+        get("/api/post/details"){
+            val postId = call.parameters["postId"] ?: kotlin.run {
+                call.respond(HttpStatusCode.BadRequest)
+                return@get
+            }
+            val post = postService.getPost(postId) ?: kotlin.run {
+                call.respond(HttpStatusCode.NotFound)
+                return@get
+            }
+            call.respond(
+                HttpStatusCode.OK,
+                BasicApiResponse(
+                    successful = true,
+                    data = post
+                )
             )
         }
     }
